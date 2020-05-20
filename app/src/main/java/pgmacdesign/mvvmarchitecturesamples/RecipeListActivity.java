@@ -1,6 +1,10 @@
 package pgmacdesign.mvvmarchitecturesamples;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModel;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +25,7 @@ import pgmacdesign.mvvmarchitecturesamples.networking.RecipeService;
 import pgmacdesign.mvvmarchitecturesamples.networking.ServiceGenerator;
 import pgmacdesign.mvvmarchitecturesamples.networking.responses.RecipeResponse;
 import pgmacdesign.mvvmarchitecturesamples.networking.responses.RecipeSearchResponse;
+import pgmacdesign.mvvmarchitecturesamples.viewmodels.RecipeListViewModel;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,11 +33,17 @@ import retrofit2.Response;
 public class RecipeListActivity extends BaseActivity {
 	
 	RecipeService recipeService = ServiceGenerator.getRecipeAPI();
+	
 	private static final String[] recipeIds = {"807602", "26851", "484d98", "484d98", "1f3d85", "46882"};
+	
+	private RecipeListViewModel viewModel;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_main);
+		this.viewModel = ViewModelProviders.of(this).get(RecipeListViewModel.class);
+//		this.viewModel = new ViewModelProvider(this, new RecipeListViewModel().getRecipes());
 		this.findViewById(R.id.test).setOnClickListener(view -> {
 			this.showProgressBar(this.progressBar.getVisibility() != View.VISIBLE);
 			this.recipeService.getRecipe(Constants.API_KEY, recipeIds[new Random().nextInt(recipeIds.length - 1)]).enqueue(
@@ -51,6 +62,13 @@ public class RecipeListActivity extends BaseActivity {
 			});
 		});
 		this.testRetrofitRequest();
+		this.subscribeObservers();
+	}
+	
+	private void subscribeObservers(){
+		this.viewModel.getRecipes().observe(this, recipes -> {
+			L.m("Data subscribe change: Recipes size == " + (recipes == null ? 0 : recipes.size()));
+		});
 	}
 	
 	private void testRetrofitRequest(){
