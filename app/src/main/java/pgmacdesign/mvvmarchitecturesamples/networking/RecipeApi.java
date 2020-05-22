@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 
-public interface RecipeService {
+public interface RecipeApi {
 	
 	/**
 	 * Search for recipes with a keyword
