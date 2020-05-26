@@ -14,15 +14,12 @@ import com.pgmacdesign.pgmactips.utilities.L;
 
 public abstract class BaseActivity extends AppCompatActivity {
 	
-	ProgressBar progressBar;
-	
-	
 	@Override
 	public void setContentView(int layoutResID) {
 		ConstraintLayout constraintLayout = (ConstraintLayout) this.getLayoutInflater().inflate(R.layout.activity_base, null);
 		FrameLayout frameLayout = constraintLayout.findViewById(R.id.activity_content);
-		this.progressBar = constraintLayout.findViewById(R.id.progress_bar);
-		this.progressBar.setIndeterminate(true);
+//		this.progressBar = constraintLayout.findViewById(R.id.progress_bar);
+//		this.progressBar.setIndeterminate(true);
 		this.getLayoutInflater().inflate(layoutResID, frameLayout, true);
 		super.setContentView(constraintLayout);
 	}
@@ -34,8 +31,8 @@ public abstract class BaseActivity extends AppCompatActivity {
 	}
 	
 	public void showProgressBar(boolean visibility){
-		this.progressBar.setVisibility((visibility) ? View.VISIBLE : View.INVISIBLE);
-		this.progressBar.bringToFront();
+//		this.progressBar.setVisibility((visibility) ? View.VISIBLE : View.INVISIBLE);
+//		this.progressBar.bringToFront();
 		L.m("Progress bar set to visible: " + visibility);
 	}
 }

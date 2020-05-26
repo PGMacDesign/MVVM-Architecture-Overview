@@ -19,9 +19,11 @@ import pgmacdesign.mvvmarchitecturesamples.repositories.RecipeRepository;
 public class RecipeListViewModel extends ViewModel {
 	
 	private RecipeRepository repository;
+	private boolean mIsViewingRecipes, mIsPerformingQuery;
 	
 	public RecipeListViewModel() {
 		this.repository = RecipeRepository.getInstance();
+		this.mIsPerformingQuery = false;
 	}
 	
 	public LiveData<List<Recipe>> getRecipes(){
@@ -34,7 +36,35 @@ public class RecipeListViewModel extends ViewModel {
 	
 	public void searchRecipesApi(String query, @IntRange(from = 1) int pageNumber){
 		L.m("Making API Call in view model");
+		this.mIsViewingRecipes = true;
+		this.mIsPerformingQuery = true;
 		this.repository.searchRecipesApi(query, pageNumber);
 	}
+	
+	public boolean onBackPressed(){
+		if(mIsViewingRecipes){
+			this.mIsViewingRecipes = false;
+			return false;
+		}
+		return true;
+	}
+	
+	//region getters and setters
+	public boolean isViewingRecipes() {
+		return mIsViewingRecipes;
+	}
+	
+	public void setIsViewingRecipes(boolean mIsViewingRecipes) {
+		this.mIsViewingRecipes = mIsViewingRecipes;
+	}
+	
+	public boolean isPerformingQuery() {
+		return mIsPerformingQuery;
+	}
+	
+	public void setPerformingQuery(boolean mIsPerformingQuery) {
+		this.mIsPerformingQuery = mIsPerformingQuery;
+	}
+	//endregion
 	
 }
